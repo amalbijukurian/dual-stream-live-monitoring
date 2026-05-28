@@ -9,17 +9,17 @@ export default function HomePage() {
 
       <div className="flex gap-4">
         <Link
-          href="/sender"
-          className="bg-blue-500 text-white px-6 py-3 rounded-lg"
+          href="/client"
+          className="home-link client"
         >
-          Open Sender
+          Open Client
         </Link>
 
         <Link
-          href="/viewer"
-          className="bg-green-500 text-white px-6 py-3 rounded-lg"
+          href="/admin"
+          className="home-link admin"
         >
-          Open Viewer
+          Open Admin
         </Link>
       </div>
     </main>

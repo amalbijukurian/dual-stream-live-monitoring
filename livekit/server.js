@@ -11,7 +11,7 @@ app.use(express.json());
 
 app.get("/getToken", async (req, res) => {
   try {
-    const { room, username } = req.query;
+    const { name, role, room, username } = req.query;
 
     if (!room || !username) {
       return res.status(400).json({
@@ -19,18 +19,29 @@ app.get("/getToken", async (req, res) => {
       });
     }
 
+    const participantRole = role === "admin" ? "admin" : "client";
+    const canPublish = participantRole !== "admin";
+
     const at = new AccessToken(
       process.env.LIVEKIT_API_KEY,
       process.env.LIVEKIT_API_SECRET,
       {
+        attributes: {
+          role: participantRole,
+        },
         identity: username,
+        metadata: JSON.stringify({
+          role: participantRole,
+        }),
+        name: name || username,
       }
     );
 
     at.addGrant({
       roomJoin: true,
       room,
-      canPublish: true,
+      canPublish,
+      canPublishData: canPublish,
       canSubscribe: true,
     });
 
