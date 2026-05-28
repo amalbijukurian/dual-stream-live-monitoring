@@ -15,7 +15,7 @@ import { RemoteTrackPublication, Track } from "livekit-client";
 import "@livekit/components-styles";
 
 const roomName = "dual-stream-room";
-const tokenServerUrl = "http://localhost:3001";
+const tokenServerUrl = "https://dual-stream-live-monitoring-backend.onrender.com";
 const liveKitServerUrl =
   "wss://dual-streaming-live-monitoring-7mwn3uss.livekit.cloud";
 
