@@ -15,12 +15,14 @@ export default function Home() {
     try {
       const room = new Room();
 
-      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3Nzk4OTA2MTcsImlkZW50aXR5IjoiYW1hbCIsImlzcyI6IkFQSTVXRGVjU1o4TVlDdiIsIm5hbWUiOiJhbWFsIiwibmJmIjoxNzc5ODkwMzE3LCJzdWIiOiJhbWFsIiwidmlkZW8iOnsicm9vbSI6InRlc3Qtcm9vbSIsInJvb21Kb2luIjp0cnVlfX0.B5cJ9NYbRbPhjUsmcIPbPBMJSCxN9QGs12mLfqUkLFw';
+      const resp = await fetch(
+  `http://localhost:3001/getToken?room=test-room&username=user1`
+);
 
-      await room.connect(
-        'wss://dual-streaming-live-monitoring-7mwn3uss.livekit.cloud',
-        token
-      );
+const data = await resp.json();
+
+const token = data.token;
+await room.connect(`wss://dual-streaming-live-monitoring-7mwn3uss.livekit.cloud`, token);
 
       console.log('Connected');
 
