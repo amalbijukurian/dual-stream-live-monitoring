@@ -1,97 +1,26 @@
-'use client';
+import Link from "next/link";
 
-import { useRef } from 'react';
-import {
-  Room,
-  createLocalVideoTrack,
-  createLocalScreenTracks,
-} from 'livekit-client';
-
-export default function Home() {
-  const cameraRef = useRef<HTMLVideoElement>(null);
-  const screenRef = useRef<HTMLVideoElement>(null);
-
-  const joinRoom = async () => {
-    try {
-      const room = new Room();
-
-      const resp = await fetch(
-  `http://localhost:3001/getToken?room=test-room&username=user1`
-);
-
-const data = await resp.json();
-
-const token = data.token;
-await room.connect(`wss://dual-streaming-live-monitoring-7mwn3uss.livekit.cloud`, token);
-
-      console.log('Connected');
-
-      // CAMERA TRACK
-      const cameraTrack = await createLocalVideoTrack();
-
-      await room.localParticipant.publishTrack(cameraTrack);
-
-      if (cameraRef.current) {
-        cameraTrack.attach(cameraRef.current);
-      }
-
-      console.log('Camera published');
-
-      // SCREEN SHARE TRACKS
-      const screenTracks = await createLocalScreenTracks();
-
-      for (const track of screenTracks) {
-        await room.localParticipant.publishTrack(track);
-
-        if (track.kind === 'video' && screenRef.current) {
-  track.attach(screenRef.current);
-}
-      }
-
-      console.log('Screen shared');
-
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
+export default function HomePage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-6 p-6">
-      <button
-        onClick={joinRoom}
-        className="rounded bg-black px-6 py-3 text-white"
-      >
-        Join Room
-      </button>
+    <main className="h-screen flex flex-col items-center justify-center gap-6">
+      <h1 className="text-4xl font-bold">
+        Dual Stream Live Monitor
+      </h1>
 
       <div className="flex gap-4">
-        <div>
-          <h2 className="mb-2 text-center font-bold">
-            Camera
-          </h2>
+        <Link
+          href="/sender"
+          className="bg-blue-500 text-white px-6 py-3 rounded-lg"
+        >
+          Open Sender
+        </Link>
 
-          <video
-            ref={cameraRef}
-            autoPlay
-            muted
-            playsInline
-            className="w-[400px] rounded-lg border"
-          />
-        </div>
-
-        <div>
-          <h2 className="mb-2 text-center font-bold">
-            Screen Share
-          </h2>
-
-          <video
-            ref={screenRef}
-            autoPlay
-            muted
-            playsInline
-            className="w-[400px] rounded-lg border"
-          />
-        </div>
+        <Link
+          href="/viewer"
+          className="bg-green-500 text-white px-6 py-3 rounded-lg"
+        >
+          Open Viewer
+        </Link>
       </div>
     </main>
   );
